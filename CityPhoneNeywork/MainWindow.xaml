@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CityPhoneNeywork"
         mc:Ignorable="d"
-            Title="MainWindow" Height="500" Width="850" MinWidth="850" MinHeight="500" Icon="Resources\icon.png" FontSize="16" FontFamily="Helvetica">
+        Title="Городские АТС" Height="500" Width="850" MinWidth="850" MinHeight="500" Icon="Resources\icon.png" FontSize="16" FontFamily="Helvetica">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition  Height="75"></RowDefinition>
@@ -14,7 +14,7 @@
         <Grid  Background="#FFFFCC99">
             <Image Source="Resources\icon.png" HorizontalAlignment="Left"></Image>
             <TextBlock Text="Городская телефонная сеть" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="26" ></TextBlock>
-            <Button Name="BackBtn" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource RegularButton}" Width="100" Height="50" Click="BackBtn_Click" Content="Назад" ></Button>
+            <Button Name="BackBtn" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource RegularButton}" Margin="0 0 5 0" Width="100" Height="50" Click="BackBtn_Click" Content="Назад" ></Button>
         </Grid>
         <Frame Name="MainFrame" Grid.Row="1" ContentRendered="MainFrame_ContentRendered"  NavigationUIVisibility="Hidden" JournalOwnership="OwnsJournal" />
 

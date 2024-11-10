@@ -28,7 +28,7 @@ namespace CityPhoneNeywork
             ComboFilter.SelectedIndex = 0;
             ComboType.SelectedIndex = 0;
         }
-
+        //Функция обновления
         public void Update()
         {
             var currentProduct = SharpovEntities.GetContext().ATS.ToList();
