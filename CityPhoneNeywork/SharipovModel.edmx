@@ -1,0 +1,519 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище CityPhoneNeyworkModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ATS">
+          <Key>
+            <PropertyRef Name="Код АТС" />
+          </Key>
+          <Property Name="Код АТС" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Название" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Вид" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Город" Type="int" Nullable="false" />
+          <Property Name="Адрес" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Кол-во абонентов" Type="int" />
+          <Property Name="Картинка" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Call_Log">
+          <Key>
+            <PropertyRef Name="Код Звонка" />
+          </Key>
+          <Property Name="Код Звонка" Type="int" Nullable="false" />
+          <Property Name="Код Абонента-Отправителя" Type="int" Nullable="false" />
+          <Property Name="Код Абонента-Получателя" Type="int" />
+          <Property Name="Дата звонка" Type="date" Nullable="false" />
+          <Property Name="Время начала звонка" Type="time" Precision="6" Nullable="false" />
+          <Property Name="Время окончания звонка" Type="time" Precision="6" Nullable="false" />
+          <Property Name="Межгородный звонок" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Код города" />
+          </Key>
+          <Property Name="Код города" Type="int" Nullable="false" />
+          <Property Name="Название города" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Price_List">
+          <Key>
+            <PropertyRef Name="Код Прайс" />
+          </Key>
+          <Property Name="Код Прайс" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Код АТС" Type="int" Nullable="false" />
+          <Property Name="Цена на городские звонки" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Цена на межгородные звонки" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subscribers">
+          <Key>
+            <PropertyRef Name="Код Абонента" />
+          </Key>
+          <Property Name="Код Абонента" Type="int" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Отчество" Type="nvarchar" MaxLength="100" />
+          <Property Name="Вид телефона" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Номер" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="Межгород" Type="bit" Nullable="false" />
+          <Property Name="Льгота" Type="bit" Nullable="false" />
+          <Property Name="Индекс" Type="nvarchar" MaxLength="6" Nullable="false" />
+          <Property Name="Район" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Улица" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Дом" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Квартира" Type="nvarchar" MaxLength="10" />
+          <Property Name="Код АТС" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subscription_Billing">
+          <Key>
+            <PropertyRef Name="Код Абонентской Платы" />
+          </Key>
+          <Property Name="Код Абонентской Платы" Type="int" Nullable="false" />
+          <Property Name="Код Абонента" Type="int" Nullable="false" />
+          <Property Name="Месяц" Type="int" Nullable="false" />
+          <Property Name="Год" Type="int" Nullable="false" />
+          <Property Name="Количество минут на городские звонки" Type="int" Nullable="false" />
+          <Property Name="Количество минут на межгородные звонки" Type="int" Nullable="false" />
+          <Property Name="Стоимость" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Сумма льготы" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Общая стоимость" Type="decimal" Precision="19" Scale="2" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK ATS City">
+          <End Role="City" Type="Self.City" Multiplicity="1" />
+          <End Role="ATS" Type="Self.ATS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Код города" />
+            </Principal>
+            <Dependent Role="ATS">
+              <PropertyRef Name="Город" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Subscribe__Код А__3E52440B">
+          <End Role="ATS" Type="Self.ATS" Multiplicity="1" />
+          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ATS">
+              <PropertyRef Name="Код АТС" />
+            </Principal>
+            <Dependent Role="Subscribers">
+              <PropertyRef Name="Код АТС" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Subscript__Код А__46E78A0C">
+          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="1" />
+          <End Role="Subscription_Billing" Type="Self.Subscription_Billing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscribers">
+              <PropertyRef Name="Код Абонента" />
+            </Principal>
+            <Dependent Role="Subscription_Billing">
+              <PropertyRef Name="Код Абонента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ATS_Price">
+          <End Role="ATS" Type="Self.ATS" Multiplicity="1" />
+          <End Role="Price_List" Type="Self.Price_List" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ATS">
+              <PropertyRef Name="Код АТС" />
+            </Principal>
+            <Dependent Role="Price_List">
+              <PropertyRef Name="Код АТС" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Receiver_Subscriber">
+          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="0..1" />
+          <End Role="Call_Log" Type="Self.Call_Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscribers">
+              <PropertyRef Name="Код Абонента" />
+            </Principal>
+            <Dependent Role="Call_Log">
+              <PropertyRef Name="Код Абонента-Получателя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sender_Subscriber">
+          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="1" />
+          <End Role="Call_Log" Type="Self.Call_Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscribers">
+              <PropertyRef Name="Код Абонента" />
+            </Principal>
+            <Dependent Role="Call_Log">
+              <PropertyRef Name="Код Абонента-Отправителя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище CityPhoneNeyworkModelContainer">
+          <EntitySet Name="ATS" EntityType="Self.ATS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Call_Log" EntityType="Self.Call_Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Price_List" EntityType="Self.Price_List" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subscribers" EntityType="Self.Subscribers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subscription_Billing" EntityType="Self.Subscription_Billing" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK ATS City" Association="Self.FK ATS City">
+            <End Role="City" EntitySet="City" />
+            <End Role="ATS" EntitySet="ATS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Subscribe__Код А__3E52440B" Association="Self.FK__Subscribe__Код А__3E52440B">
+            <End Role="ATS" EntitySet="ATS" />
+            <End Role="Subscribers" EntitySet="Subscribers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Subscript__Код А__46E78A0C" Association="Self.FK__Subscript__Код А__46E78A0C">
+            <End Role="Subscribers" EntitySet="Subscribers" />
+            <End Role="Subscription_Billing" EntitySet="Subscription_Billing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ATS_Price" Association="Self.FK_ATS_Price">
+            <End Role="ATS" EntitySet="ATS" />
+            <End Role="Price_List" EntitySet="Price_List" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Receiver_Subscriber" Association="Self.FK_Receiver_Subscriber">
+            <End Role="Subscribers" EntitySet="Subscribers" />
+            <End Role="Call_Log" EntitySet="Call_Log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sender_Subscriber" Association="Self.FK_Sender_Subscriber">
+            <End Role="Subscribers" EntitySet="Subscribers" />
+            <End Role="Call_Log" EntitySet="Call_Log" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CityPhoneNeyworkModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ATS">
+          <Key>
+            <PropertyRef Name="Код_АТС" />
+          </Key>
+          <Property Name="Код_АТС" Type="Int32" Nullable="false" />
+          <Property Name="Название" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Вид" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Город" Type="Int32" Nullable="false" />
+          <Property Name="Адрес" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Кол_во_абонентов" Type="Int32" />
+          <NavigationProperty Name="City" Relationship="Self.FK_ATS_City" FromRole="ATS" ToRole="City" />
+          <NavigationProperty Name="Subscribers" Relationship="Self.FK__Subscribe__Код_А__3E52440B" FromRole="ATS" ToRole="Subscribers" />
+          <NavigationProperty Name="Price_List" Relationship="Self.FK_ATS_Price" FromRole="ATS" ToRole="Price_List" />
+          <Property Name="Картинка" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Call_Log">
+          <Key>
+            <PropertyRef Name="Код_Звонка" />
+          </Key>
+          <Property Name="Код_Звонка" Type="Int32" Nullable="false" />
+          <Property Name="Код_Абонента_Отправителя" Type="Int32" Nullable="false" />
+          <Property Name="Код_Абонента_Получателя" Type="Int32" />
+          <Property Name="Дата_звонка" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Время_начала_звонка" Type="Time" Nullable="false" Precision="6" />
+          <Property Name="Время_окончания_звонка" Type="Time" Nullable="false" Precision="6" />
+          <Property Name="Межгородный_звонок" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Subscribers" Relationship="Self.FK_Receiver_Subscriber" FromRole="Call_Log" ToRole="Subscribers" />
+          <NavigationProperty Name="Subscribers1" Relationship="Self.FK_Sender_Subscriber" FromRole="Call_Log" ToRole="Subscribers" />
+        </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="Код_города" />
+          </Key>
+          <Property Name="Код_города" Type="Int32" Nullable="false" />
+          <Property Name="Название_города" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ATS" Relationship="Self.FK_ATS_City" FromRole="City" ToRole="ATS" />
+        </EntityType>
+        <EntityType Name="Price_List">
+          <Key>
+            <PropertyRef Name="Код_Прайс" />
+          </Key>
+          <Property Name="Код_Прайс" Type="Int32" Nullable="false" />
+          <Property Name="Код_АТС" Type="Int32" Nullable="false" />
+          <Property Name="Цена_на_городские_звонки" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Цена_на_межгородные_звонки" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="ATS" Relationship="Self.FK_ATS_Price" FromRole="Price_List" ToRole="ATS" />
+        </EntityType>
+        <EntityType Name="Subscribers">
+          <Key>
+            <PropertyRef Name="Код_Абонента" />
+          </Key>
+          <Property Name="Код_Абонента" Type="Int32" Nullable="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Имя" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Отчество" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Вид_телефона" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Номер" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Межгород" Type="Boolean" Nullable="false" />
+          <Property Name="Льгота" Type="Boolean" Nullable="false" />
+          <Property Name="Индекс" Type="String" MaxLength="6" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Район" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Улица" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Дом" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Квартира" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Код_АТС" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ATS" Relationship="Self.FK__Subscribe__Код_А__3E52440B" FromRole="Subscribers" ToRole="ATS" />
+          <NavigationProperty Name="Call_Log" Relationship="Self.FK_Receiver_Subscriber" FromRole="Subscribers" ToRole="Call_Log" />
+          <NavigationProperty Name="Call_Log1" Relationship="Self.FK_Sender_Subscriber" FromRole="Subscribers" ToRole="Call_Log" />
+          <NavigationProperty Name="Subscription_Billing" Relationship="Self.FK__Subscript__Код_А__46E78A0C" FromRole="Subscribers" ToRole="Subscription_Billing" />
+        </EntityType>
+        <EntityType Name="Subscription_Billing">
+          <Key>
+            <PropertyRef Name="Код_Абонентской_Платы" />
+          </Key>
+          <Property Name="Код_Абонентской_Платы" Type="Int32" Nullable="false" />
+          <Property Name="Код_Абонента" Type="Int32" Nullable="false" />
+          <Property Name="Месяц" Type="Int32" Nullable="false" />
+          <Property Name="Год" Type="Int32" Nullable="false" />
+          <Property Name="Количество_минут_на_городские_звонки" Type="Int32" Nullable="false" />
+          <Property Name="Количество_минут_на_межгородные_звонки" Type="Int32" Nullable="false" />
+          <Property Name="Стоимость" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Сумма_льготы" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Общая_стоимость" Type="Decimal" Precision="19" Scale="2" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Subscribers" Relationship="Self.FK__Subscript__Код_А__46E78A0C" FromRole="Subscription_Billing" ToRole="Subscribers" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_ATS_City">
+          <End Role="City" Type="Self.City" Multiplicity="1" />
+          <End Role="ATS" Type="Self.ATS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="Код_города" />
+            </Principal>
+            <Dependent Role="ATS">
+              <PropertyRef Name="Город" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Subscribe__Код_А__3E52440B">
+          <End Role="ATS" Type="Self.ATS" Multiplicity="1" />
+          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ATS">
+              <PropertyRef Name="Код_АТС" />
+            </Principal>
+            <Dependent Role="Subscribers">
+              <PropertyRef Name="Код_АТС" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ATS_Price">
+          <End Role="ATS" Type="Self.ATS" Multiplicity="1" />
+          <End Role="Price_List" Type="Self.Price_List" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ATS">
+              <PropertyRef Name="Код_АТС" />
+            </Principal>
+            <Dependent Role="Price_List">
+              <PropertyRef Name="Код_АТС" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Receiver_Subscriber">
+          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="0..1" />
+          <End Role="Call_Log" Type="Self.Call_Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscribers">
+              <PropertyRef Name="Код_Абонента" />
+            </Principal>
+            <Dependent Role="Call_Log">
+              <PropertyRef Name="Код_Абонента_Получателя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sender_Subscriber">
+          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="1" />
+          <End Role="Call_Log" Type="Self.Call_Log" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscribers">
+              <PropertyRef Name="Код_Абонента" />
+            </Principal>
+            <Dependent Role="Call_Log">
+              <PropertyRef Name="Код_Абонента_Отправителя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Subscript__Код_А__46E78A0C">
+          <End Role="Subscribers" Type="Self.Subscribers" Multiplicity="1" />
+          <End Role="Subscription_Billing" Type="Self.Subscription_Billing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subscribers">
+              <PropertyRef Name="Код_Абонента" />
+            </Principal>
+            <Dependent Role="Subscription_Billing">
+              <PropertyRef Name="Код_Абонента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SharpovEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ATS" EntityType="Self.ATS" />
+          <EntitySet Name="Call_Log" EntityType="Self.Call_Log" />
+          <EntitySet Name="City" EntityType="Self.City" />
+          <EntitySet Name="Price_List" EntityType="Self.Price_List" />
+          <EntitySet Name="Subscribers" EntityType="Self.Subscribers" />
+          <EntitySet Name="Subscription_Billing" EntityType="Self.Subscription_Billing" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_ATS_City" Association="Self.FK_ATS_City">
+            <End Role="City" EntitySet="City" />
+            <End Role="ATS" EntitySet="ATS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Subscribe__Код_А__3E52440B" Association="Self.FK__Subscribe__Код_А__3E52440B">
+            <End Role="ATS" EntitySet="ATS" />
+            <End Role="Subscribers" EntitySet="Subscribers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ATS_Price" Association="Self.FK_ATS_Price">
+            <End Role="ATS" EntitySet="ATS" />
+            <End Role="Price_List" EntitySet="Price_List" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Receiver_Subscriber" Association="Self.FK_Receiver_Subscriber">
+            <End Role="Subscribers" EntitySet="Subscribers" />
+            <End Role="Call_Log" EntitySet="Call_Log" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sender_Subscriber" Association="Self.FK_Sender_Subscriber">
+            <End Role="Subscribers" EntitySet="Subscribers" />
+            <End Role="Call_Log" EntitySet="Call_Log" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Subscript__Код_А__46E78A0C" Association="Self.FK__Subscript__Код_А__46E78A0C">
+            <End Role="Subscribers" EntitySet="Subscribers" />
+            <End Role="Subscription_Billing" EntitySet="Subscription_Billing" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище CityPhoneNeyworkModelContainer" CdmEntityContainer="SharpovEntities">
+          <EntitySetMapping Name="ATS">
+            <EntityTypeMapping TypeName="CityPhoneNeyworkModel.ATS">
+              <MappingFragment StoreEntitySet="ATS">
+                <ScalarProperty Name="Картинка" ColumnName="Картинка" />
+                <ScalarProperty Name="Код_АТС" ColumnName="Код АТС" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+                <ScalarProperty Name="Вид" ColumnName="Вид" />
+                <ScalarProperty Name="Город" ColumnName="Город" />
+                <ScalarProperty Name="Адрес" ColumnName="Адрес" />
+                <ScalarProperty Name="Кол_во_абонентов" ColumnName="Кол-во абонентов" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Call_Log">
+            <EntityTypeMapping TypeName="CityPhoneNeyworkModel.Call_Log">
+              <MappingFragment StoreEntitySet="Call_Log">
+                <ScalarProperty Name="Код_Звонка" ColumnName="Код Звонка" />
+                <ScalarProperty Name="Код_Абонента_Отправителя" ColumnName="Код Абонента-Отправителя" />
+                <ScalarProperty Name="Код_Абонента_Получателя" ColumnName="Код Абонента-Получателя" />
+                <ScalarProperty Name="Дата_звонка" ColumnName="Дата звонка" />
+                <ScalarProperty Name="Время_начала_звонка" ColumnName="Время начала звонка" />
+                <ScalarProperty Name="Время_окончания_звонка" ColumnName="Время окончания звонка" />
+                <ScalarProperty Name="Межгородный_звонок" ColumnName="Межгородный звонок" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="City">
+            <EntityTypeMapping TypeName="CityPhoneNeyworkModel.City">
+              <MappingFragment StoreEntitySet="City">
+                <ScalarProperty Name="Код_города" ColumnName="Код города" />
+                <ScalarProperty Name="Название_города" ColumnName="Название города" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Price_List">
+            <EntityTypeMapping TypeName="CityPhoneNeyworkModel.Price_List">
+              <MappingFragment StoreEntitySet="Price_List">
+                <ScalarProperty Name="Код_Прайс" ColumnName="Код Прайс" />
+                <ScalarProperty Name="Код_АТС" ColumnName="Код АТС" />
+                <ScalarProperty Name="Цена_на_городские_звонки" ColumnName="Цена на городские звонки" />
+                <ScalarProperty Name="Цена_на_межгородные_звонки" ColumnName="Цена на межгородные звонки" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscribers">
+            <EntityTypeMapping TypeName="CityPhoneNeyworkModel.Subscribers">
+              <MappingFragment StoreEntitySet="Subscribers">
+                <ScalarProperty Name="Код_Абонента" ColumnName="Код Абонента" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="Вид_телефона" ColumnName="Вид телефона" />
+                <ScalarProperty Name="Номер" ColumnName="Номер" />
+                <ScalarProperty Name="Межгород" ColumnName="Межгород" />
+                <ScalarProperty Name="Льгота" ColumnName="Льгота" />
+                <ScalarProperty Name="Индекс" ColumnName="Индекс" />
+                <ScalarProperty Name="Район" ColumnName="Район" />
+                <ScalarProperty Name="Улица" ColumnName="Улица" />
+                <ScalarProperty Name="Дом" ColumnName="Дом" />
+                <ScalarProperty Name="Квартира" ColumnName="Квартира" />
+                <ScalarProperty Name="Код_АТС" ColumnName="Код АТС" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscription_Billing">
+            <EntityTypeMapping TypeName="CityPhoneNeyworkModel.Subscription_Billing">
+              <MappingFragment StoreEntitySet="Subscription_Billing">
+                <ScalarProperty Name="Код_Абонентской_Платы" ColumnName="Код Абонентской Платы" />
+                <ScalarProperty Name="Код_Абонента" ColumnName="Код Абонента" />
+                <ScalarProperty Name="Месяц" ColumnName="Месяц" />
+                <ScalarProperty Name="Год" ColumnName="Год" />
+                <ScalarProperty Name="Количество_минут_на_городские_звонки" ColumnName="Количество минут на городские звонки" />
+                <ScalarProperty Name="Количество_минут_на_межгородные_звонки" ColumnName="Количество минут на межгородные звонки" />
+                <ScalarProperty Name="Стоимость" ColumnName="Стоимость" />
+                <ScalarProperty Name="Сумма_льготы" ColumnName="Сумма льготы" />
+                <ScalarProperty Name="Общая_стоимость" ColumnName="Общая стоимость" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="CityPhoneNeyworkModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
